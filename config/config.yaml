@@ -1,0 +1,11 @@
+domain: "example.com"
+modules:
+  crtsh: true
+  subfinder: true
+  permutations: true
+  dns_resolution: true
+  http_check: false
+
+permutations:
+  wordlist: "data/perms.txt"
+  max_depth: 2
