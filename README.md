@@ -1,12 +1,8 @@
 # 🚀 SmartRecon
 
 ```
-   ____                      _____                      
-  / ___|  ___  __ _ _ __ ___| ____|_  ___ __   ___  ___ 
-  \___ \ / _ \/ _` | '__/ _ \  _| \ \/ / '_ \ / _ \/ __|
-   ___) |  __/ (_| | | |  __/ |___ >  <| |_) |  __/\__ \
-  |____/ \___|\__,_|_|  \___|_____/_/\_\ .__/ \___||___/
-                                      |_|               
+![Logo do projeto](/static/synck-logo.png.png)
+
 ```
 
 > Ferramenta de Reconhecimento (Recon) desenvolvida em Go para coleta de informações de domínios e subdomínios.
@@ -46,7 +42,7 @@ SmartRecon é uma ferramenta rápida e extensível escrita em Go, focada em real
 - Checagem de status HTTP
 - Permutações e variações de nomes de subdomínios
 - Suporte a módulos configuráveis
-- Relatórios simples e exportação em JSON
+- Relatórios simples e exportação em JSON ( Em Desenvolvimento )
 
 ---
 
