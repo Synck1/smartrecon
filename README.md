@@ -1,9 +1,8 @@
 # 🚀 SmartRecon
 
-```
+
 ![Logo do projeto](/static/synck-logo.png.png)
 
-```
 
 > Ferramenta de Reconhecimento (Recon) desenvolvida em Go para coleta de informações de domínios e subdomínios.
 
