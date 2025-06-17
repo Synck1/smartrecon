@@ -1,8 +1,10 @@
-domain: "example.com"
+domain: ""
 modules:
   crtsh: true
   subfinder: true
   permutations: true
+  revwhois: true
+  amass: true
   dns_resolution: true
   http_check: false
 
