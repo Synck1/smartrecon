@@ -10,12 +10,10 @@ import (
 	"strings"
 )
 
-// Cria pasta output se não existir
 func setupOutputDir() {
 	os.MkdirAll("output", 0755)
 }
 
-// Pergunta o domínio pro usuário
 func askDomain() string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Digite o domínio (ex: globo.com.br): ")
@@ -23,7 +21,6 @@ func askDomain() string {
 	return strings.TrimSpace(domainInput)
 }
 
-// Busca no CRT.sh
 func getFromCrtSh(domain string) []string {
 	fmt.Println("[*] Coletando subdomínios via crt.sh...")
 	crtshSubs, err := core.FetchFromCrtSh(domain)
@@ -35,7 +32,6 @@ func getFromCrtSh(domain string) []string {
 	return crtshSubs
 }
 
-// Busca no RevWhois (domínios relacionados)
 func getFromRevWhois(domain string) []string {
 	fmt.Println("[*] Buscando domínios relacionados via RevWhois...")
 	relatedDomains, err := core.RunRevWhois(domain)
@@ -47,7 +43,6 @@ func getFromRevWhois(domain string) []string {
 	return relatedDomains
 }
 
-// Busca no Amass
 func getFromAmass(domain string) []string {
 	fmt.Println("[*] Coletando subdomínios via Amass...")
 	subs, err := core.RunAmass(domain)
@@ -59,7 +54,6 @@ func getFromAmass(domain string) []string {
 	return subs
 }
 
-// Busca no Subfinder
 func getFromSubfinder(domain string) []string {
 	fmt.Println("[*] Coletando subdomínios via Subfinder...")
 	subs, err := core.RunSubfinder(domain)
@@ -71,7 +65,6 @@ func getFromSubfinder(domain string) []string {
 	return subs
 }
 
-// Gera permutações
 func generatePermutations(subs []string) []string {
 	fmt.Println("[*] Gerando permutações inteligentes...")
 	perms := core.GenerateAutoPermutations(subs)
@@ -79,7 +72,6 @@ func generatePermutations(subs []string) []string {
 	return perms
 }
 
-// Salva resultado
 func saveSubdomains(subs []string) {
 	if err := core.SaveToFile(subs, "output/subs.txt"); err != nil {
 		log.Println("[-] Erro ao salvar subs.txt:", err)
@@ -88,7 +80,6 @@ func saveSubdomains(subs []string) {
 	}
 }
 
-// Resolve DNS
 func resolveDNS() {
 	fmt.Println("[*] Rodando DNSX para resolver subdomínios...")
 	if err := core.RunDNSX("output/subs.txt", "output/resolved.txt"); err != nil {
@@ -98,7 +89,6 @@ func resolveDNS() {
 	}
 }
 
-// Função principal
 func Run(cfg *config.Config) {
 	setupOutputDir()
 
@@ -112,15 +102,12 @@ func Run(cfg *config.Config) {
 
 	var allSubs []string
 
-	// 🔥 Busca subdomínios do domínio principal
 	allSubs = append(allSubs, getFromCrtSh(domain)...)
 	allSubs = append(allSubs, getFromSubfinder(domain)...)
 	allSubs = append(allSubs, getFromAmass(domain)...)
 
-	// 🔍 Busca domínios relacionados
 	relatedDomains := getFromRevWhois(domain)
 
-	// 🔥 Roda o mesmo recon para os domínios relacionados
 	for _, related := range relatedDomains {
 		fmt.Println("[*] Coletando subdomínios do domínio relacionado:", related)
 		allSubs = append(allSubs, getFromCrtSh(related)...)
@@ -128,16 +115,13 @@ func Run(cfg *config.Config) {
 		allSubs = append(allSubs, getFromAmass(related)...)
 	}
 
-	// 🔁 Limpa duplicatas
 	allSubs = core.CleanLines(allSubs)
 	fmt.Printf("[+] %d subdomínios únicos coletados\n", len(allSubs))
 
-	// 🤖 Permutação inteligente
 	perms := generatePermutations(allSubs)
 	allFinal := core.CleanLines(append(allSubs, perms...))
 	fmt.Printf("[+] %d subdomínios após permutação\n", len(allFinal))
 
-	// 💾 Salvar e Resolver
 	saveSubdomains(allFinal)
 	resolveDNS()
 
