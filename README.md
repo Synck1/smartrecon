@@ -97,5 +97,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para de
 
 ## 📬 Contato
 
-Synck — rafaelsoares7l@gmail.com 
 Link do projeto: [https://github.com/rafasor/smartrecon](https://github.com/rafasor/smartrecon)
