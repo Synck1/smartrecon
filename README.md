@@ -1,4 +1,4 @@
-# 🚀 SmartRecon
+# Synck SmartRecon
 
 
 ![Logo do projeto](/static/synck-logo.png.png)
