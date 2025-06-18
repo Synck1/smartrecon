@@ -11,13 +11,11 @@ import (
 	"strings"
 )
 
-// 🔥 Remove ANSI (se quiser aplicar na leitura de DNSX)
 func RemoveANSICodes(input string) string {
 	re := regexp.MustCompile(`\x1b\[[0-9;]*m`)
 	return re.ReplaceAllString(input, "")
 }
 
-// 🔍 Extrai IPs de arquivo DNSX
 func ExtractIPsFromDNSXOutput(path string) []string {
 	data, _ := os.ReadFile(path)
 	lines := strings.Split(string(data), "\n")
@@ -36,7 +34,6 @@ func ExtractIPsFromDNSXOutput(path string) []string {
 	return CleanLines(ips)
 }
 
-// 🔗 IP → ASN → CIDR
 func IPToASN(ip string) (asn string, owner string, cidr string) {
 	url := fmt.Sprintf("https://ipinfo.io/%s/json", ip)
 	resp, err := http.Get(url)
@@ -58,7 +55,6 @@ func IPToASN(ip string) (asn string, owner string, cidr string) {
 	return asn, owner, cidr
 }
 
-// ASN → Todos os Ranges
 func ASNToRanges(asn string) ([]string, error) {
 	url := fmt.Sprintf("https://api.bgpview.io/asn/%s/prefixes", strings.TrimPrefix(asn, "AS"))
 	resp, err := http.Get(url)
@@ -90,7 +86,6 @@ func ASNToRanges(asn string) ([]string, error) {
 	return ranges, nil
 }
 
-// 🔥 🔥 Filtra ASN que pertence à empresa
 func FilterASNFromIPs(ipListPath string, keywords []string) []string {
 	file, err := os.Open(ipListPath)
 	if err != nil {
