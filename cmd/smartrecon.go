@@ -80,12 +80,53 @@ func saveSubdomains(subs []string) {
 	}
 }
 
-func resolveDNS() {
+func resolveDNS() []string {
 	fmt.Println("[*] Rodando DNSX para resolver subdomínios...")
-	if err := core.RunDNSX("output/subs.txt", "output/resolved.txt"); err != nil {
+	err := core.RunDNSX("output/subs.txt", "output/resolved.txt")
+	if err != nil {
 		log.Println("[-] Erro ao rodar dnsx:", err)
-	} else {
-		fmt.Println("[+] Subdomínios resolvidos salvos em output/resolved.txt")
+		return []string{}
+	}
+	fmt.Println("[+] Subdomínios resolvidos salvos em output/resolved.txt")
+	ips := core.ExtractIPsFromDNSXOutput("output/resolved.txt")
+	core.SaveToFile(ips, "output/ips.txt")
+	fmt.Printf("[+] Total de %d IPs resolvidos\n", len(ips))
+	return ips
+}
+
+func runASNMapping(ips []string) {
+	fmt.Println("[*] Mapeando IPs → ASN → Ranges...")
+
+	var allRanges []string
+
+	for _, ip := range ips {
+		asn, owner, cidr := core.IPToASN(ip)
+		if asn != "" {
+			fmt.Printf("[ASN INFO] IP: %s | ASN: %s | OWNER: %s | CIDR: %s\n", ip, asn, owner, cidr)
+
+			ranges, err := core.ASNToRanges(asn)
+			if err == nil {
+				allRanges = append(allRanges, ranges...)
+			} else {
+				fmt.Println("[-] Erro ao obter ranges do ASN:", err)
+			}
+		}
+	}
+
+	allRanges = core.CleanLines(allRanges)
+	core.SaveToFile(allRanges, "output/ranges.txt")
+	fmt.Printf("[+] Total de %d ranges salvos em output/ranges.txt\n", len(allRanges))
+}
+
+func asnFilter() {
+
+	keywords := []string{"globo", "globosat", "grupo globo"}
+
+	asns := core.FilterASNFromIPs("output/ips.txt", keywords)
+
+	fmt.Println("[+] ASN encontrados que batem com a empresa:")
+	for _, a := range asns {
+		fmt.Println(a)
 	}
 }
 
@@ -123,7 +164,11 @@ func Run(cfg *config.Config) {
 	fmt.Printf("[+] %d subdomínios após permutação\n", len(allFinal))
 
 	saveSubdomains(allFinal)
-	resolveDNS()
+
+	ips := resolveDNS()
+
+	runASNMapping(ips)
+	asnFilter()
 
 	fmt.Println("[*] Recon Finalizado com sucesso!")
 }

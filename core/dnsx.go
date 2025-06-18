@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-// RunDNSX executa o dnsx com um arquivo de entrada e salva a saída
+// RunDNSX executa o dnsx com input e output definidos
 func RunDNSX(inputPath, outputPath string, extraArgs ...string) error {
 	inputFile, err := os.Open(inputPath)
 	if err != nil {
@@ -14,14 +14,14 @@ func RunDNSX(inputPath, outputPath string, extraArgs ...string) error {
 	}
 	defer inputFile.Close()
 
+	// Cria output
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		return fmt.Errorf("erro ao criar output: %v", err)
 	}
 	defer outputFile.Close()
 
-	// Comando base
-	cmdArgs := []string{"-silent", "-a", "-resp"}
+	cmdArgs := []string{"-silent", "-a", "-resp", "-nc"}
 	cmdArgs = append(cmdArgs, extraArgs...)
 
 	cmd := exec.Command("dnsx", cmdArgs...)

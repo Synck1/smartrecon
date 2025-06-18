@@ -7,7 +7,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// 🔥 Struct que mapeia seu config.yaml
 type Config struct {
 	Domain string `yaml:"domain"`
 
@@ -27,7 +26,6 @@ type Config struct {
 	} `yaml:"permutations"`
 }
 
-// 🚀 Função que carrega o arquivo YAML pra dentro da struct
 func LoadConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -40,7 +38,6 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	// Limpa espaços no domínio (boa prática)
 	cfg.Domain = strings.TrimSpace(cfg.Domain)
 
 	return &cfg, nil

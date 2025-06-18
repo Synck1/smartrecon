@@ -26,10 +26,10 @@ func GeneratePermutations(subdomains []string, wordlist []string) []string {
 				continue
 			}
 
-			mutated = append(mutated, word+"."+sub)             // dev.api.example.com
-			mutated = append(mutated, name+"-"+word+"."+domain) // api-dev.example.com
-			mutated = append(mutated, word+"-"+name+"."+domain) // dev-api.example.com
-			mutated = append(mutated, name+"."+word+"."+domain) // api.dev.example.com
+			mutated = append(mutated, word+"."+sub)
+			mutated = append(mutated, name+"-"+word+"."+domain)
+			mutated = append(mutated, word+"-"+name+"."+domain)
+			mutated = append(mutated, name+"."+word+"."+domain)
 		}
 	}
 	return mutated
