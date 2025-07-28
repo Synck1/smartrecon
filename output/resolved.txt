@@ -1,7 +1,1 @@
-cpanel.uber.com.br [A] [15.235.14.211] 
-cpcalendars.uber.com.br [A] [15.235.14.211] 
-cpcontacts.uber.com.br [A] [15.235.14.211] 
-mail.uber.com.br [A] [15.235.14.211] 
-uber.com.br [A] [15.235.14.211] 
-webmail.uber.com.br [A] [15.235.14.211] 
-webdisk.uber.com.br [A] [15.235.14.211] 
+
